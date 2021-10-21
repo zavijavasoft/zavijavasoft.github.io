@@ -4,6 +4,9 @@ function getImages() {
   images = document.getElementsByTagName('img');
   for (var i = 0; i < images.length; ++i) {
     console.log("Image ", images[i].src);
+    yandex.imageRecognizer.recognizeImage(images[i], function (result) {
+      console.log(result);
+    })
   }
 }
 
