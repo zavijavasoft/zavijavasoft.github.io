@@ -22,12 +22,16 @@ function startRecognition() {
     if (!!img._recogn) {
       continue;
     }
-    yandex.imageRecognizer.recognizeImage(images[i], function(result) {
-      console.log(result);
-      for (var obj of result) {
-        __placeAnchor(img, obj.x, obj.center.y);
-      }
-    });
+    if (!!yandex && !!yandex.imageRecognizer) {
+      yandex.imageRecognizer.recognizeImage(images[i], function(result) {
+        console.log(result.result);
+        var objects = JSON.parse(result.result).objects;
+        console.log(objects);
+        for (var obj of objects) {
+          __placeAnchor(img, obj.id, obj.center.x, obj.center.y);
+        }
+      });
+    }
   }
 }
 
