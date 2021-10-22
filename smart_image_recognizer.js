@@ -24,7 +24,7 @@ function startRecognition() {
     }
     yandex.imageRecognizer.recognizeImage(images[i], function(result) {
       console.log(result);
-      for (var obj of result.objects) {
+      for (var obj of result) {
         __placeAnchor(img, obj.x, obj.center.y);
       }
     });
