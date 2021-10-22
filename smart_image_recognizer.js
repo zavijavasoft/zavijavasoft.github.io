@@ -3,13 +3,13 @@ var images;
 function startRecognition() {
   console.log("startRecognition called");
   images = document.getElementsByTagName('img');
-  for (var i = 0; i < images.length; ++i) {
-    var img = images[i];
+  for (var i = 0, ln = images.length; i < ln; ++i) {
+    const img = images[i];
     if (!!img._recogn) {
       continue;
     }
     if (!!yandex && !!yandex.imageRecognizer) {
-      yandex.imageRecognizer.recognizeImage(images[i], function(result) {
+      yandex.imageRecognizer.recognizeImage(img, function(result) {
         console.log(result.result);
         var objects = JSON.parse(result.result).objects;
         console.log(objects);
