@@ -69,7 +69,7 @@ function __placeAnchor(img, id, x, y) {
     };
     img.insertAdjacentElement('afterEnd', anchor);
   }
-  anchor.src = "thefoe-6.png";
+  anchor.src = "thefoe6.png";
 }
 
 function __removeAnchor(img) {
