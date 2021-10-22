@@ -1,19 +1,5 @@
 var images;
 
-function getImages() {
-  images = document.getElementsByTagName('img');
-  for (var i = 0; i < images.length; ++i) {
-    console.log("Image ", images[i].src);
-    var img = images[i];
-    console.log(img);
-    if (!!img._recogn) {
-      continue;
-    }
-    __placeAnchor(img, "IndianaJones", 0.225, 0.235);
-  }
-  console.log('End of getImages()')
-}
-
 function startRecognition() {
   console.log("startRecognition called");
   images = document.getElementsByTagName('img');
@@ -48,28 +34,39 @@ function stopRecognition() {
         break;
       }
     }
+    divs = document.getElementsByTagName('div');
+    for (var i = 0; i < divs.length; ++i) {
+      var div = divs[i];
+      if (__removeAnchor(div)) {
+        hasAnchors = true;
+        break;
+      }
+    }
   } while (hasAnchors)
 }
 
 function __placeAnchor(img, id, x, y) {
   img._recogn = "target";
-  var anchor = new Image();
-  anchor.onload = function() {
-    var xshift = -(1 - x) * img.width - anchor.width / 2;
-    var yshift = -(1 - y) * img.height - anchor.height / 2;
-    var style = "position: relative; left:" + xshift + "px; top:" + yshift + "px;";
-    anchor.style = style;
-    anchor._recogn = "anchor";
-    anchor._id = id;
-    anchor.onclick = function() {
-      console.log("I'm clicked: " + anchor._id);
-      if (!!yandex && !!yandex.imageRecognizer) {
-        yandex.imageRecognizer.showImageInfo(anchor._id);
-      }
-    };
-    img.insertAdjacentElement('afterEnd', anchor);
-  }
-  anchor.src = "thefoe6.png";
+  var anchor = document.createElement("div");
+  var rect = img.getBoundingClientRect();
+  var absX = rect.left + x * rect.width + pageXOffset;
+  var absY = rect.top + y * rect.height + pageYOffset;
+  var anchor_style = "position: absolute; left:" + absX + "px; top:" + absY + "px;";
+  anchor_style += " width: 4.25vw; height: 4.25vw; ";
+  anchor_style += "transform: translate(-50% , -50% );";
+  anchor_style += "box-shadow: inset 0px 0px 0px 0.5vw rgb(255 255 255);";
+  anchor_style += "border-radius: 50% ;";
+  anchor_style += "background: linear-gradient(45deg, rgb(135 50 220), rgb(135 50 220 / 50% ));";
+  anchor.style = anchor_style;
+  anchor._recogn = "anchor";
+  anchor._id = id;
+  anchor.onclick = function() {
+    console.log("I'm clicked: " + anchor._id);
+    if (!!yandex && !!yandex.imageRecognizer) {
+      yandex.imageRecognizer.showObjectInfo(anchor._id);
+    }
+  };
+  document.body.appendChild(anchor);
 }
 
 function __removeAnchor(img) {
