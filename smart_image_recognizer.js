@@ -1,6 +1,8 @@
 var images;
 
-function startRecognition() {
+var timeOutId = null;
+
+function startRecognition(minWidth = 100, minHeigth = 100) {
   console.log("startRecognition called");
   images = document.getElementsByTagName('img');
   for (var i = 0, ln = images.length; i < ln; ++i) {
@@ -8,21 +10,34 @@ function startRecognition() {
     if (!!img._recogn) {
       continue;
     }
+    if (img.height < minHeigth) {
+      continue;
+    }
+    if (img.width < minWidth) {
+      continue;
+    }
+    if (!__isImageInViewPort(img)) {
+      continue;
+    }
+    console.log(img + " found");
     if (!!yandex && !!yandex.imageRecognizer) {
+      console.log(img + " recognized");
       yandex.imageRecognizer.recognizeImage(img, function(result) {
-        console.log(result.result);
         var objects = JSON.parse(result.result).objects;
-        console.log(objects);
         for (var obj of objects) {
           __placeAnchor(img, obj.id, obj.center.x, obj.center.y);
         }
       });
     }
   }
+  timeOutId = setTimeout(startRecognition, 1000, minWidth, minHeigth)
 }
 
 function stopRecognition() {
   console.log("stopRecognition called");
+  if (!!timeOutId) {
+    clearTimeout(timeOutId);
+  }
   var hasAnchors;
   do {
     hasAnchors = false;
@@ -79,6 +94,22 @@ function __removeAnchor(img) {
       break;
   }
   return false;
+}
+
+function __isImageInViewPort(img) {
+  var rect = img.getBoundingClientRect();
+  return (
+    rect.top >= 0 &&
+    rect.left >= 0 &&
+    rect.top <= (window.innerHeight || document.documentElement.clientHeight) &&
+    rect.left <= (window.innerWidth || document.documentElement.clientWidth)
+  ) || (
+    rect.bottom >= 0 &&
+    rect.right >= 0 &&
+    rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+    rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+
+  );
 }
 
 console.log("Recognition script injected")
