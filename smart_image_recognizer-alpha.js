@@ -168,7 +168,6 @@ function __animate(delay) {
     var boxSize = value / maxAnchorSizeVW * boxShadowSizeVW;
     i.style.boxShadow = "inset 0px 0px 0px " + boxSize + "vw rgb(255 255 255)";
     if (value == maxAnchorSizeVW) {
-      console.log("Value: " + delta + " ms");
       i._live = -1;
     }
   }
