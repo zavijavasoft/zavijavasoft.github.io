@@ -6,6 +6,10 @@ var anchors = [];
 
 var _minHeight = 100;
 var _minWidth = 100;
+var _animationRequest;
+const maxAnchorSizeVW = 4.25;
+const boxShadowSizeVW = 0.5;
+
 
 function startRecognition(minWidth = 100, minHeigth = 100) {
   console.log("startRecognition called");
@@ -15,9 +19,11 @@ function startRecognition(minWidth = 100, minHeigth = 100) {
   _minHeight = minHeigth;
   _minWidth = minWidth;
   __handleImages();
+  _animationRequest = requestAnimationFrame(__animate);
 }
 
 function stopRecognition() {
+  cancelAnimationFrame(_animationRequest);
   console.log("stopRecognition called");
   document.body.removeEventListener("touchend", __onTouchEvent, false);
   document.body.removeEventListener("touchcancel", __onTouchEvent, false);
@@ -54,13 +60,14 @@ function __placeAnchor(img, id, x, y) {
   anchor._x = x;
   anchor._y = y;
   anchor._recogn = "anchor";
+  anchor._live = performance.now();
   anchor.img_id = img._recogn_id;
   var rect = img.getBoundingClientRect();
   var absX = rect.left + x * rect.width + pageXOffset;
   var absY = rect.top + y * rect.height + pageYOffset;
   var anchor_style = "position: absolute; left:" + absX + "px; top:" + absY + "px;";
   anchor_style += "z-index: 2147483647;";
-  anchor_style += " width: 4.25vw; height: 4.25vw; ";
+  anchor_style += " width: 0vw; height: 0vw; ";
   anchor_style += "transform: translate(-50% , -50% );";
   anchor_style += "box-shadow: inset 0px 0px 0px 0.5vw rgb(255 255 255);";
   anchor_style += "border-radius: 50% ;";
@@ -122,11 +129,10 @@ function __handleImages() {
     if (!__isImageInViewPort(img)) {
       continue;
     }
-    console.log(img + " found");
     if (!!yandex && !!yandex.imageRecognizer) {
-      console.log(img + " recognized");
       yandex.imageRecognizer.recognizeImage(img, function(result) {
         var objects = JSON.parse(result.result).objects;
+        console.log("Recognized " + objects.length + " objects");
         for (var obj of objects) {
           __placeAnchor(img, obj.id, obj.center.x, obj.center.y);
         }
@@ -147,6 +153,26 @@ function __onTouchEvent(evt) {
   console.log("touch end handling");
   __handleImages();
   setTimeout(__handleImages, 500);
+}
+
+function __animate(delay) {
+  for (i of anchors) {
+    if (i._live < 0) {
+      continue;
+    }
+    var delta = delay - i._live;
+    var value = maxAnchorSizeVW * 1.20 * Math.sin(delta / 139.2);
+    value = Math.min(Math.max(value, 0), maxAnchorSizeVW);
+    i.style.width = value + "vw";
+    i.style.height = value + "vw";
+    var boxSize = value / maxAnchorSizeVW * boxShadowSizeVW;
+    i.style.boxShadow = "inset 0px 0px 0px " + boxSize + "vw rgb(255 255 255)";
+    if (value == maxAnchorSizeVW) {
+      console.log("Value: " + delta + " ms");
+      i._live = -1;
+    }
+  }
+  _animationRequest = requestAnimationFrame(__animate);
 }
 
 function __isImageInViewPort(img) {
