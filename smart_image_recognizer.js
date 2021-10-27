@@ -168,21 +168,34 @@ function __onTouchEvent(evt) {
 
 function __animate(delay) {
   for (i of anchors) {
+    var rect = i.getBoundingClientRect();
+    var height = document.documentElement.clientHeight;
+    if (rect.top < height * 0.1) {
+      i.style.opacity = __clamp(rect.top / (height * 0.1), 0, 1);
+    } else if (rect.bottom > height * 0.9) {
+      i.style.opacity = __clamp(((height - rect.bottom) / (height * 0.1)), 0, 1);
+    } else {
+      i.style.opacity = 1;
+    }
     if (i._live < 0) {
       continue;
     }
     var delta = delay - i._live;
+    if (delta > 300) {
+      delta = 300;
+      i._live = -1;
+    }
     var value = maxAnchorSizeVW * 1.20 * Math.sin(delta / 139.2);
-    value = Math.min(Math.max(value, 0), maxAnchorSizeVW);
     i.style.width = value + "vw";
     i.style.height = value + "vw";
     var boxSize = value / maxAnchorSizeVW * boxShadowSizeVW;
     i.style.boxShadow = "inset 0px 0px 0px " + boxSize + "vw rgb(255 255 255)";
-    if (value == maxAnchorSizeVW) {
-      i._live = -1;
-    }
   }
   _animationRequest = requestAnimationFrame(__animate);
+}
+
+function __clamp(value, start, end) {
+  return Math.min(Math.max(value, start), end);
 }
 
 function __isImageInViewPort(img) {
