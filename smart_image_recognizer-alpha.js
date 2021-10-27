@@ -76,7 +76,7 @@ function __placeAnchor(img, id, x, y) {
   var absX = rect.left + x * rect.width + pageXOffset;
   var absY = rect.top + y * rect.height + pageYOffset;
   var anchor_style = "position: absolute; left:" + absX + "px; top:" + absY + "px;";
-  anchor_style += "z-index: 2147483647;";
+  anchor_style += "z-index: " + window.getZIndex(img.parentNode) + 1; //2147483647;";
   anchor_style += " width: 0vw; height: 0vw; ";
   anchor_style += "transform: translate(-50% , -50% );";
   anchor_style += "box-shadow: inset 0px 0px 0px 0.5vw rgb(255 255 255);";
