@@ -10,24 +10,34 @@ var _animationRequest;
 const maxAnchorSizeVW = 4.25;
 const boxShadowSizeVW = 0.5;
 
-
 function startRecognition(minWidth = 100, minHeigth = 100) {
   console.log("startRecognition called");
-  document.body.addEventListener("touchend", __onTouchEvent, false);
-  document.body.addEventListener("touchcancel", __onTouchEvent, false);
-  document.body.addEventListener("touchmove", __onTouchMoveEvent, false);
   _minHeight = minHeigth;
   _minWidth = minWidth;
   __handleImages();
   _animationRequest = requestAnimationFrame(__animate);
 }
 
-function stopRecognition() {
+function continueRecognition() {
+  console.log("continueRecognition called");
   cancelAnimationFrame(_animationRequest);
-  console.log("stopRecognition called");
+  document.body.addEventListener("touchend", __onTouchEvent, false);
+  document.body.addEventListener("touchcancel", __onTouchEvent, false);
+  document.body.addEventListener("touchmove", __onTouchMoveEvent, false);
+  _animationRequest = requestAnimationFrame(__animate);
+}
+
+function pauseRecognition() {
+  console.log("pauseRecognition called");
   document.body.removeEventListener("touchend", __onTouchEvent, false);
   document.body.removeEventListener("touchcancel", __onTouchEvent, false);
   document.body.removeEventListener("touchmove", __onTouchEvent, false);
+}
+
+function stopRecognition() {
+  cancelAnimationFrame(_animationRequest);
+  console.log("stopRecognition called");
+  pauseRecognition();
 
   var hasAnchors;
   do {
