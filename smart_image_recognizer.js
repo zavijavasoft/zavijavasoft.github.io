@@ -108,12 +108,15 @@ function __removeAnchor(img) {
       img._recogn = undefined;
       img._recogn_id = undefined;
       break;
+    case "empty":
+      img._recogn = undefined;
+      break;
   }
   return false;
 }
 
 function __replaceAnchorsForImage(img) {
-  if (!img._recogn) {
+  if (img._recogn != "target") {
     return;
   }
 
@@ -152,6 +155,9 @@ function __handleImages() {
         for (var obj of objects) {
           __placeAnchor(img, obj.id, obj.center.x, obj.center.y);
         }
+        if (objects.length == 0) {
+          img._recogn = "empty";
+        }
       });
     } else {
       __placeAnchor(img, String(Math.random()), 0.1, 0.1);
@@ -173,14 +179,16 @@ function __onTouchEvent(evt) {
 
 function __animate(delay) {
   for (i of anchors) {
+    if (!__isImageInViewPort(i)) {
+      continue;
+    }
     var rect = i.getBoundingClientRect();
-    var height = document.documentElement.clientHeight;
+    var height = window.innerHeight || document.documentElement.clientHeight;
+    i.style.opacity = 1
     if (rect.top < height * 0.1) {
       i.style.opacity = __clamp(rect.top / (height * 0.1), 0, 1);
     } else if (rect.bottom > height * 0.9) {
       i.style.opacity = __clamp(((height - rect.bottom) / (height * 0.1)), 0, 1);
-    } else {
-      i.style.opacity = 1;
     }
     if (i._live < 0) {
       continue;
