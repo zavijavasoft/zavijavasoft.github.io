@@ -21,6 +21,7 @@ function startRecognition(minWidth = 100, minHeigth = 100) {
 function continueRecognition() {
   console.log("continueRecognition called");
   cancelAnimationFrame(_animationRequest);
+  __handleImages();
   document.body.addEventListener("touchend", __onTouchEvent, false);
   document.body.addEventListener("touchcancel", __onTouchEvent, false);
   document.body.addEventListener("touchmove", __onTouchMoveEvent, false);
@@ -38,7 +39,10 @@ function stopRecognition() {
   cancelAnimationFrame(_animationRequest);
   console.log("stopRecognition called");
   pauseRecognition();
+  clearAnchors();
+}
 
+function clearAnchors() {
   var hasAnchors;
   do {
     hasAnchors = false;
@@ -60,6 +64,7 @@ function stopRecognition() {
     }
   } while (hasAnchors)
   anchors = [];
+
 }
 
 function __placeAnchor(img, id, x, y) {
