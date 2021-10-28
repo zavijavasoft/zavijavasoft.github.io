@@ -89,7 +89,6 @@ function __placeAnchor(img, id, x, y) {
   anchor_style += "background: linear-gradient(45deg, rgb(135 50 220), rgb(135 50 220 / 50% ));";
   anchor.style = anchor_style;
   anchor.onclick = function() {
-    console.log("I'm clicked: " + anchor.id);
     if (!!yandex && !!yandex.imageRecognizer) {
       yandex.imageRecognizer.showObjectInfo(img, anchor.id);
     }
@@ -183,11 +182,12 @@ function __animate(delay) {
     }
     var rect = i.getBoundingClientRect();
     var height = window.innerHeight || document.documentElement.clientHeight;
+    var border_height = height * 0.1;
     i.style.opacity = 1
     if (rect.top < height * 0.1) {
-      i.style.opacity = __clamp(rect.top / (height * 0.1), 0, 1);
+      i.style.opacity = __clamp(Math.pow(rect.top / border_height, 3), 0, 1);
     } else if (rect.bottom > height * 0.9) {
-      i.style.opacity = __clamp(((height - rect.bottom) / (height * 0.1)), 0, 1);
+      i.style.opacity = __clamp(Math.pow((height - rect.bottom) / border_height, 3), 0, 1);
     }
   }
   _animationRequest = requestAnimationFrame(__animate);
