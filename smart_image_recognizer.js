@@ -81,9 +81,9 @@ function __placeAnchor(img, id, x, y) {
   var absY = rect.top + y * rect.height + pageYOffset;
   var anchor_style = "position: absolute; left:" + absX + "px; top:" + absY + "px;";
   anchor_style += "z-index: 2147483647;";
-  anchor_style += " width: 4.25vw; height: 4.25vw; ";
+  anchor_style += " width: 6.25vw; height: 6.25vw; ";
   anchor_style += "transform: translate(-50% , -50% );";
-  anchor_style += "box-shadow: inset 0px 0px 0px 0.5vw rgb(255 255 255);";
+  anchor_style += "box-shadow: inset 0px 0px 0px 0.7vw rgb(255 255 255);";
   anchor_style += "animation: smartimagepointappear 300ms;";
   anchor_style += "border-radius: 50% ;";
   anchor_style += "background: linear-gradient(45deg, rgb(135 50 220), rgb(135 50 220 / 50% ));";
@@ -223,8 +223,8 @@ var cssAnimation = document.createElement('style');
 cssAnimation.type = 'text/css';
 var rules = document.createTextNode('@keyframes smartimagepointappear {' +
   'from { width:0vw; height:0vw; box-shadow: inset 0px 0px 0px 0vw rgb(255 255 255);}' +
-  '70% {width:5.1vw; height:5.1vw; box-shadow: inset 0px 0px 0px 0.6vw rgb(255 255 255); }' +
-  'to { width:4.25vw; height:4.25vw; box-shadow: inset 0px 0px 0px 0.5vw rgb(255 255 255);}' +
+  '70% {width:7.2vw; height:7.2vw; box-shadow: inset 0px 0px 0px 0.8vw rgb(255 255 255); }' +
+  'to { width:6vw; height:6.0vw; box-shadow: inset 0px 0px 0px 0.7vw rgb(255 255 255);}' +
   '}');
 cssAnimation.appendChild(rules);
 document.getElementsByTagName("head")[0].appendChild(cssAnimation);
