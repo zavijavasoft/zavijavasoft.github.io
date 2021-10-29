@@ -32,7 +32,7 @@ function pauseRecognition() {
   console.log("pauseRecognition called");
   document.body.removeEventListener("touchend", __onTouchEvent, false);
   document.body.removeEventListener("touchcancel", __onTouchEvent, false);
-  document.body.removeEventListener("touchmove", __onTouchEvent, false);
+  document.body.removeEventListener("touchmove", __onTouchMoveEvent, false);
 }
 
 function stopRecognition() {
