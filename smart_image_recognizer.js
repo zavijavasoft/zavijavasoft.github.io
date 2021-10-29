@@ -79,16 +79,26 @@ function __placeAnchor(img, id, x, y) {
   var rect = img.getBoundingClientRect();
   var absX = rect.left + x * rect.width + pageXOffset;
   var absY = rect.top + y * rect.height + pageYOffset;
-  var anchor_style = "position: absolute; left:" + absX + "px; top:" + absY + "px;";
-  anchor_style += "z-index: 2147483647;";
-  anchor_style += " width: 4.25vw; height: 4.25vw; ";
+  var anchor_style = "position: absolute; left:" + absX + "px; top:" + absY + "px; padding: -50%";
+  anchor_style += "z-index: 2147483646; background: #0000; display: block;";
+  anchor_style += "width: 6vw; height: 6vw;";
   anchor_style += "transform: translate(-50% , -50% );";
-  anchor_style += "box-shadow: inset 0px 0px 0px 0.5vw rgb(255 255 255);";
-  anchor_style += "animation: smartimagepointappear 300ms;";
-  anchor_style += "border-radius: 50% ;";
-  anchor_style += "background: linear-gradient(45deg, rgb(135 50 220), rgb(135 50 220 / 50% ));";
   anchor.style = anchor_style;
+
+  var box = document.createElement("div");
+  var box_style = "position: relative;  display: block; z-index: 2147483647;";
+  box_style += "margin: 0 auto; margin-top:0.75vw;"
+  box_style += "width: 4.25vw; height: 4.25vw; ";
+  box_style += "box-shadow: inset 0px 0px 0px 0.5vw rgb(255 255 255);";
+  box_style += "animation: smartimagepointappear 300ms;";
+  box_style += "border-radius: 50% ;";
+  box_style += "background: linear-gradient(45deg, rgb(135 50 220), rgb(135 50 220 / 50% ));";
+  box.style = box_style;
+
+  anchor.appendChild(box);
+
   anchor.onclick = function() {
+    console.log("Clicked ", anchor.id)
     if (!!yandex && !!yandex.imageRecognizer) {
       yandex.imageRecognizer.showObjectInfo(img, anchor.id);
     }
@@ -222,9 +232,9 @@ function __isImageInViewPort(img) {
 var cssAnimation = document.createElement('style');
 cssAnimation.type = 'text/css';
 var rules = document.createTextNode('@keyframes smartimagepointappear {' +
-  'from { width:0vw; height:0vw; box-shadow: inset 0px 0px 0px 0vw rgb(255 255 255);}' +
-  '70% {width:5.1vw; height:5.1vw; box-shadow: inset 0px 0px 0px 0.6vw rgb(255 255 255); }' +
-  'to { width:4.25vw; height:4.25vw; box-shadow: inset 0px 0px 0px 0.5vw rgb(255 255 255);}' +
+  'from { width:0vw; height:0vw; margin-top:3vw; box-shadow: inset 0px 0px 0px 0vw rgb(255 255 255);}' +
+  '70% {width:5.1vw; height:5.1vw; margin-top:0.45vw; box-shadow: inset 0px 0px 0px 0.6vw rgb(255 255 255); }' +
+  'to { width:4.25vw; height:4.25vw; margin-top:0.75vw; box-shadow: inset 0px 0px 0px 0.5vw rgb(255 255 255);}' +
   '}');
 cssAnimation.appendChild(rules);
 document.getElementsByTagName("head")[0].appendChild(cssAnimation);
