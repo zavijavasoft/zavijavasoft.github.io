@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+
+<html lang="ru">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title> Проверка темной темы</title>
+ 
+    <script>
+        var info = "Not supported"
+        if (window.matchMedia('(prefers-color-scheme)').media !== 'not all') {
+            console.log(' Dark mode is supported');
+        } else {
+            console.log(" Dark mode is not supported")
+        }
+        var roots = document.getElementsByTagName("html");
+        var html = roots[0];
+        html.style.backgroundColor = "#fff";
+        const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+        console.log(darkModeMediaQuery)
+        if (darkModeMediaQuery.matches) {
+            html.style.backgroundColor = "#000";
+        }
+        darkModeMediaQuery.addListener((e) => {
+            const darkModeOn = e.matches;
+            console.log(`Dark mode is ${darkModeOn ? ' on' : '️ off'}.`);
+            if (darkModeOn) {
+                html.style.backgroundColor = "#000";
+            } else {
+                html.style.backgroundColor = "#fff";
+            }
+        });  
+    </script>
+</head>
+
+<body>
+
+</body>
+
+</html>
